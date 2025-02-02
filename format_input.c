@@ -8,53 +8,6 @@
 // check duplicate -> ft_split -> ?
 // check min max int -> ft_split -> ft_atoi
 
-int count_nums(char *str)
-{
-    int count;
-    int num;
-
-    num = 0;
-    count = 0;
-    while (*str)
-    {
-        if (*str != ' ' && !num)
-        {
-            num = 1;
-            count++;
-        }
-        else if (*str == ' ' && num)
-            num = 0;
-        str++;
-    }
-    return count;
-}
-
-int check_duplicate(int num, node *list)
-{
-    while (list)
-    {
-        if (num == list->data)
-            return 0;
-        list = list->next;
-    }
-    return 1;
-}
-
-// What if it's only spaces but not num
-int check_for_numeric(char *str)
-{
-    int i;
-
-    i = 0;
-    while (str[i])
-    {
-        if (!ft_isdigit(str[i]) && !(str[i] == ' ' || str[i] == '-' || str[i] == '+'))
-            return 0;
-        i++;
-    }
-    return 1;
-}
-
 node *create_node(int num)
 {
     node *new_node;
@@ -69,9 +22,8 @@ node *create_node(int num)
     return new_node;
 }
 
-node *split_to_node(char *str)
+int create_stack(char *str, node **head)
 {
-    node *head = NULL;
     node *new_node;
     node *temp = NULL;
     char **split_res;
@@ -79,22 +31,32 @@ node *split_to_node(char *str)
     int num;
 
     split_res = ft_split(str, ' ');
+    if ((*head) != NULL)
+    {
+        temp = (*head);
+        while (temp->next)
+            temp = temp->next;
+    }
     i = 0;
     while (i < count_nums(str))
     {
         num = ft_atoi(split_res[i]);
         if ((!num && ft_strlen(split_res[i]) > 0) ||
             !check_for_numeric(split_res[i]) ||
-            !check_duplicate(num, head))
+            !check_duplicate(num, (*head)))
         {
             ft_putstr_fd("Error\n", 1);
-            return NULL;
+            clear_list((*head));
+            return 0;
         }
         new_node = create_node(num);
         if (!new_node)
-            return NULL;
-        if (!head)
-            head = new_node;
+        {
+            clear_list((*head));
+            return 0;
+        }
+        if (!(*head))
+            (*head) = new_node;
         if (temp)
         {
             temp->next = new_node;
@@ -103,37 +65,29 @@ node *split_to_node(char *str)
         temp = new_node;
         i++;
     }
-    return head;
+    free(split_res);
+    return 1;
 }
 
-void format_input(int ac, char **av)
+node *format_input(int ac, char **av)
 {
     node *head = NULL;
-    node *temp;
-    node *list;
+    node *tail;
+    int list_created;
     int i;
 
     i = 1;
     while (i < ac)
     {
-        list = split_to_node(av[i]);
-        if (!list)
-            return;
-        if (!head)
-            head = list;
-        else
-        {
-            temp = head;
-            while (temp->next)
-                temp = temp->next;
-            temp->next = list;
-        }
+        list_created = create_stack(av[i], &head);
+        if (!list_created)
+            return NULL;
         i++;
     }
-    temp = head;
-    while (temp)
+    tail = head;
+    while (tail->next)
     {
-        printf("%i\n", temp->data);
-        temp = temp->next;
+        tail = tail->next;
     }
+    return head;
 }
