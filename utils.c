@@ -22,6 +22,19 @@ int count_nums(char *str)
     return count;
 }
 
+// Free linked list
+void free_stack(node **stack)
+{
+    node *temp;
+
+    while (*stack)
+    {
+        temp = (*stack)->next;
+        free(*stack);
+        *stack = temp;
+    }
+}
+
 // Count nodes of the linked list
 int count_nodes(node *stack)
 {

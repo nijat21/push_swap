@@ -54,13 +54,11 @@ int *list_to_arr(node *stack, int size)
     return arr;
 }
 
-int find_median(node *stack)
+int find_median(node *stack, int size)
 {
     int median;
     int *arr;
-    int size;
 
-    size = count_nodes(stack);
     arr = list_to_arr(stack, size);
     quick_sort(arr, 0, size - 1);
     median = arr[size / 2];

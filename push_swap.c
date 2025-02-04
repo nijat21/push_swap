@@ -23,8 +23,6 @@ int main(int ac, char **av)
 
     res = format_input(ac, av);
 
-    find_median(res);
-
     sort(&res);
 
     printf("Res\n");
@@ -33,4 +31,5 @@ int main(int ac, char **av)
         printf("%i\n", res->data);
         res = res->next;
     }
+    free_stack(&res);
 }

@@ -22,6 +22,19 @@ node *create_node(int num)
     return new_node;
 }
 
+void free_split(char ***str, int size)
+{
+    int i;
+
+    i = 0;
+    while (i < size)
+    {
+        free((*str)[i]);
+        i++;
+    }
+    free(*str);
+}
+
 int create_stack(char *str, node **head)
 {
     node *new_node;
@@ -29,8 +42,12 @@ int create_stack(char *str, node **head)
     char **split_res;
     int i;
     int num;
+    int size;
 
+    size = count_nums(str);
     split_res = ft_split(str, ' ');
+    if (!split_res)
+        free_split(&split_res, size);
     if ((*head) != NULL)
     {
         temp = (*head);
@@ -38,7 +55,7 @@ int create_stack(char *str, node **head)
             temp = temp->next;
     }
     i = 0;
-    while (i < count_nums(str))
+    while (i < size)
     {
         num = ft_atoi(split_res[i]);
         if ((!num && ft_strlen(split_res[i]) > 0) ||
@@ -65,7 +82,7 @@ int create_stack(char *str, node **head)
         temp = new_node;
         i++;
     }
-    free(split_res);
+    free_split(&split_res, size);
     return 1;
 }
 
