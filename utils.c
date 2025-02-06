@@ -39,14 +39,12 @@ void free_stack(node **stack)
 }
 
 // Free a dynamic array
-void free_arr(char ***str, int size)
+void free_arr(char ***str)
 {
     int i;
 
-    if (!str || !(*str))
-        return;
     i = 0;
-    while (i < size)
+    while ((*str)[i])
     {
         free((*str)[i]);
         i++;

@@ -25,3 +25,15 @@ int check_duplicate(int num, node *list)
     }
     return 1;
 }
+
+int is_valid(int num, char *str, node **head)
+{
+    if ((!num && ft_strlen(str) > 0) ||
+        !check_for_numeric(str) ||
+        !check_duplicate(num, (*head)))
+    {
+        ft_putstr_fd("Error\n", 1);
+        return (0);
+    }
+    return (1);
+}

@@ -1,23 +1,8 @@
 #include "push_swap.h"
 
-void free_list(node *stack)
-{
-    node *temp;
-
-    if (!stack)
-        return;
-    while (stack)
-    {
-        temp = (stack)->next;
-        free(stack);
-        stack = temp;
-    }
-    stack = NULL;
-}
-
 int main(int ac, char **av)
 {
-    node *res;
+    node *res = NULL;
     // node *tail;
 
     if (ac < 2)
@@ -30,13 +15,16 @@ int main(int ac, char **av)
         return (0);
     }
 
-    sort(&res);
+    // sort(&res);
+    final(&res);
+
+    node *temp = res;
 
     printf("Res\n");
-    while (res)
+    while (temp)
     {
-        printf("%i\n", res->data);
-        res = res->next;
+        printf("%i\n", temp->data);
+        temp = temp->next;
     }
-    free_list(res);
+    free_stack(&res);
 }

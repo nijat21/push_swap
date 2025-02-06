@@ -3,7 +3,6 @@
 // input is given as "1 3 4 5 6 7 8" -> 1 string av[1]
 // input is given as 1 3 4 5 6 7 8 -> 7 strings av[1], av[2] ....av[6]
 // input is given as "1 2 3 5" 5 6 7 8 -> 2 strings av[1], av[2]
-
 // check non-numeric
 // check duplicate -> ft_split -> ?
 // check min max int -> ft_split -> ft_atoi
@@ -21,66 +20,55 @@ node *create_node(int num)
     return new_node;
 }
 
-int arr_to_stack(node **head, node **temp, char ***split_res, int size)
+int arr_to_stack(node **head, node **tail, char ***split_res)
 {
     int i;
     int num;
     node *new_node = NULL;
 
     i = 0;
-    while (i < size)
+    while ((*split_res)[i])
     {
         num = ft_atoi((*split_res)[i]);
-        if ((!num && ft_strlen((*split_res)[i]) > 0) ||
-            !check_for_numeric((*split_res)[i]) ||
-            !check_duplicate(num, (*head)))
-        {
-            ft_putstr_fd("Error\n", 1);
-            free_stack(head);
-            free_arr(split_res, size);
+        if (!is_valid(num, (*split_res)[i], head))
             return 0;
-        }
         new_node = create_node(num);
         if (!new_node)
-        {
-            free_stack(head);
-            free_arr(split_res, size);
             return 0;
-        }
         if (!(*head))
             (*head) = new_node;
-        if ((*temp))
+        if ((*tail))
         {
-            (*temp)->next = new_node;
-            new_node->prev = (*temp);
+            (*tail)->next = new_node;
+            new_node->prev = (*tail);
         }
-        (*temp) = new_node;
+        (*tail) = new_node;
         new_node = NULL;
         i++;
     }
-    free_arr(split_res, size);
     return (1);
 }
 
-int create_stack(char *str, node **head)
+int create_stack(char *str, node **head, node **tail)
 {
-
-    node *temp = NULL;
     char **split_res;
-    int size;
     int res;
 
-    size = count_nums(str);
     split_res = ft_split(str, ' ');
     if (!split_res)
+    {
+        free_arr(&split_res);
+        free_stack(head);
         return (0);
+    }
     if ((*head) != NULL)
     {
-        temp = (*head);
-        while (temp->next)
-            temp = temp->next;
+        (*tail) = (*head);
+        while ((*tail)->next)
+            (*tail) = (*tail)->next;
     }
-    res = arr_to_stack(head, &temp, &split_res, size);
+    res = arr_to_stack(head, tail, &split_res);
+    free_arr(&split_res);
     if (!res)
     {
         free_stack(head);
@@ -92,25 +80,20 @@ int create_stack(char *str, node **head)
 node *format_input(int ac, char **av)
 {
     node *head = NULL;
-    node *tail;
+    node *tail = NULL;
     int list_created;
     int i;
 
     i = 1;
     while (i < ac)
     {
-        list_created = create_stack(av[i], &head);
+        list_created = create_stack(av[i], &head, &tail);
         if (!list_created)
         {
             free_stack(&head);
             return NULL;
         }
         i++;
-    }
-    tail = head;
-    while (tail->next)
-    {
-        tail = tail->next;
     }
     return head;
 }

@@ -69,7 +69,7 @@ void partition_b(node **stack, node **b)
     median = find_median(*stack, count_nodes(*b));
     while (*b && count_nodes(*b) > 0)
     {
-        if ((*b)->data > median)
+        if ((*b)->data < median)
             pa(b, stack);
         else
         {
@@ -87,11 +87,13 @@ void partition_b(node **stack, node **b)
 void final(node **stack)
 {
     node *b = NULL;
-    printf("Final");
+    int size;
 
-    if (count_nodes(*stack) == 2 && !is_sorted(*stack))
+    printf("Final");
+    size = count_nodes(*stack);
+    if (size == 2 && !is_sorted(*stack))
         sa(stack);
-    while (*stack && count_nodes(*stack) > 2)
+    while (*stack && size > 2)
     {
         printf("A loop");
         partition_a(stack, &b);
@@ -102,5 +104,5 @@ void final(node **stack)
         partition_b(stack, &b);
     }
     // free_stack(stack);
-    // free_stack(&b);
+    free_stack(&b);
 }
