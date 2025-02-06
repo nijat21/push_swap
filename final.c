@@ -6,15 +6,24 @@ int is_sorted(node *stack)
     {
         if (stack->data > stack->next->data)
             return (0);
-        return (1);
     }
+    return (1);
 }
 
-int tail_smaller_median(node *a, int median)
+int tail_smaller_median(node *stack, int median)
 {
-    while (a->next)
-        a = a->next;
-    if (a->data < median)
+    while (stack->next)
+        stack = stack->next;
+    if (stack->data < median)
+        return (1);
+    return (0);
+}
+
+int tail_bigger_median(node *stack, int median)
+{
+    while (stack->next)
+        stack = stack->next;
+    if (stack->data < median)
         return (1);
     return (0);
 }
@@ -30,40 +39,68 @@ int has_smaller(node *a, int median)
     return 0;
 }
 
-void partition(node **stack, node **b, int size, int median)
+void partition_a(node **stack, node **b)
 {
-    node *a;
+    int median;
 
-    a = *stack;
-    while (!is_sorted(a) && has_smaller(a, median))
+    median = find_median(*stack, count_nodes(*stack));
+    while (!is_sorted(*stack) && has_smaller(*stack, median))
     {
-        if (a->data < median)
-            pb(&a, b);
+        printf("A partition");
+        if ((*stack)->data < median)
+            pb(stack, b);
         else
         {
-            if (tail_smaller_median(a, median))
+            if (tail_smaller_median(*stack, median))
             {
-                rra(&a);
-                pb(&a, b);
+                rra(stack);
+                pb(stack, b);
             }
             else
-                ra(&a);
+                ra(stack);
+        }
+    }
+}
+
+void partition_b(node **stack, node **b)
+{
+    int median;
+
+    median = find_median(*stack, count_nodes(*b));
+    while (*b && count_nodes(*b) > 0)
+    {
+        if ((*b)->data > median)
+            pa(b, stack);
+        else
+        {
+            if (tail_bigger_median(*b, median))
+            {
+                rrb(b);
+                pa(b, stack);
+            }
+            else
+                rb(b);
         }
     }
 }
 
 void final(node **stack)
 {
-    int median;
     node *b = NULL;
-    int size;
+    printf("Final");
 
-    size = count_nodes(*stack);
-    median = find_median(*stack, size);
-    while (*stack && count_nodes(*stack) > 2)
-    {
-        partition(stack, &b, size, median);
-    }
     if (count_nodes(*stack) == 2 && !is_sorted(*stack))
         sa(stack);
+    while (*stack && count_nodes(*stack) > 2)
+    {
+        printf("A loop");
+        partition_a(stack, &b);
+    }
+    while (b && count_nodes(b) > 0)
+    {
+        printf("B loop");
+        partition_b(stack, &b);
+    }
+    // free_stack(stack);
+    // free_stack(&b);
 }

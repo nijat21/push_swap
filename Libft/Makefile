@@ -4,7 +4,7 @@ NAME = libft.a
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -g -Wall -Wextra -Werror
 
 CFLAGS += -D BUFFER_SIZE=$(BUFFER_SIZE)
 BUFFER_SIZE ?= 42

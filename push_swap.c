@@ -1,15 +1,18 @@
 #include "push_swap.h"
 
-int get_size(node *stack)
+void free_list(node *stack)
 {
-    int count = 0;
+    node *temp;
 
-    while (stack->next)
+    if (!stack)
+        return;
+    while (stack)
     {
-        count++;
-        stack = stack->next;
+        temp = (stack)->next;
+        free(stack);
+        stack = temp;
     }
-    return count;
+    stack = NULL;
 }
 
 int main(int ac, char **av)
@@ -17,11 +20,15 @@ int main(int ac, char **av)
     node *res;
     // node *tail;
 
-    (void)av;
     if (ac < 2)
         return (0);
 
     res = format_input(ac, av);
+    if (!res)
+    {
+        free_stack(&res);
+        return (0);
+    }
 
     sort(&res);
 
@@ -31,5 +38,5 @@ int main(int ac, char **av)
         printf("%i\n", res->data);
         res = res->next;
     }
-    free_stack(&res);
+    free_list(res);
 }

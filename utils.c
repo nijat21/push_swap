@@ -27,20 +27,42 @@ void free_stack(node **stack)
 {
     node *temp;
 
+    if (!stack || !(*stack))
+        return;
     while (*stack)
     {
         temp = (*stack)->next;
         free(*stack);
         *stack = temp;
     }
+    *stack = NULL;
+}
+
+// Free a dynamic array
+void free_arr(char ***str, int size)
+{
+    int i;
+
+    if (!str || !(*str))
+        return;
+    i = 0;
+    while (i < size)
+    {
+        free((*str)[i]);
+        i++;
+    }
+    free(*str);
+    *str = NULL;
 }
 
 // Count nodes of the linked list
 int count_nodes(node *stack)
 {
     int count = 0;
-    node *current = stack;
 
+    if (!stack)
+        return (0);
+    node *current = stack;
     while (current)
     {
         count++;

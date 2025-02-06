@@ -30,20 +30,6 @@ int find_max(node *stack)
     return max;
 }
 
-// Function to count nodes in stack
-int count_nodes(node *stack)
-{
-    int count = 0;
-    node *current = stack;
-
-    while (current)
-    {
-        count++;
-        current = current->next;
-    }
-    return count;
-}
-
 // Function to find the best rotation direction and count for a target number
 void find_best_rotation(node *stack, int target, int *rotations, int *reverse)
 {

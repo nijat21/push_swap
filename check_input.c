@@ -25,28 +25,3 @@ int check_duplicate(int num, node *list)
     }
     return 1;
 }
-
-void clear_list(node *list)
-{
-    node *temp;
-
-    while (list)
-    {
-        temp = list->next;
-        free(list);
-        list = temp;
-    }
-}
-
-int list_size(node *list)
-{
-    int count;
-
-    count = 0;
-    while (list)
-    {
-        count++;
-        list = list->next;
-    }
-    return count;
-}

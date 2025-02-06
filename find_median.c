@@ -62,7 +62,7 @@ int find_median(node *stack, int size)
     arr = list_to_arr(stack, size);
     quick_sort(arr, 0, size - 1);
     median = arr[size / 2];
-    printf("Median %i\n", median);
+    // printf("Median %i\n", median);
     free(arr);
     arr = NULL;
     return median;

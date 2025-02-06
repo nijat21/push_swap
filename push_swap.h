@@ -14,8 +14,6 @@ typedef struct s_node
 node *format_input(int ac, char **av);
 int check_for_numeric(char *str);
 int check_duplicate(int num, node *list);
-void clear_list(node *list);
-int list_size(node *list);
 
 // Sort operations
 void swap_first_two(node **stack);
@@ -40,8 +38,10 @@ int count_nums(char *str);
 int count_nodes(node *stack);
 int find_median(node *stack, int size);
 void free_stack(node **stack);
+void free_arr(char ***str, int size);
 
 // Simplified sort
 void sort(node **stack);
+// void final(node **stack);
 
 #endif
