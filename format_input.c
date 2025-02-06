@@ -64,6 +64,7 @@ int arr_to_stack(node **head, node **temp, char ***split_res, int size)
 
 int create_stack(char *str, node **head)
 {
+
     node *temp = NULL;
     char **split_res;
     int size;
