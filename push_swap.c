@@ -16,15 +16,16 @@ int main(int ac, char **av)
     }
 
     // sort(&res);
+
     final(&res);
 
-    node *temp = res;
+    // node *temp = res;
 
-    printf("Res\n");
-    while (temp)
-    {
-        printf("%i\n", temp->data);
-        temp = temp->next;
-    }
+    // printf("Res\n");
+    // while (temp)
+    // {
+    //     printf("%i\n", temp->data);
+    //     temp = temp->next;
+    // }
     free_stack(&res);
 }

@@ -2,10 +2,14 @@
 
 int is_sorted(node *stack)
 {
-    while (stack->next)
+    node *temp;
+
+    temp = stack;
+    while (temp->next)
     {
-        if (stack->data > stack->next->data)
+        if (temp->data > temp->next->data)
             return (0);
+        temp = temp->next;
     }
     return (1);
 }
@@ -19,90 +23,158 @@ int tail_smaller_median(node *stack, int median)
     return (0);
 }
 
-int tail_bigger_median(node *stack, int median)
+int has_smaller(node **stack, int median)
 {
-    while (stack->next)
-        stack = stack->next;
-    if (stack->data < median)
-        return (1);
-    return (0);
-}
+    node *temp;
 
-int has_smaller(node *a, int median)
-{
-    while (a)
+    temp = *stack;
+    while (temp)
     {
-        if (a->data < median)
-            return 1;
-        a = a->next;
+        if (temp->data < median)
+            return (1);
+        temp = temp->next;
     }
     return 0;
 }
 
-void partition_a(node **stack, node **b)
+int has_bigger(node **stack, int median)
+{
+    node *temp;
+
+    temp = *stack;
+    while (temp)
+    {
+        if (temp->data > median)
+            return (1);
+        temp = temp->next;
+    }
+    return 0;
+}
+
+void sa_partition(node **src, node **dst)
 {
     int median;
 
-    median = find_median(*stack, count_nodes(*stack));
-    while (!is_sorted(*stack) && has_smaller(*stack, median))
+    median = find_median(*src, count_nodes(*src));
+    while (count_nodes(*src) > 2 && has_smaller(src, median)) //
     {
-        printf("A partition");
-        if ((*stack)->data < median)
-            pb(stack, b);
+        if ((*src)->data < median)
+        {
+            push_to_stack(src, dst);
+            ft_putstr_fd("pb\n", 1);
+        }
         else
         {
-            if (tail_smaller_median(*stack, median))
+            if (tail_smaller_median(*src, median))
             {
-                rra(stack);
-                pb(stack, b);
+                rev_rotate_stack(src);
+                ft_putstr_fd("rra\n", 1);
+                push_to_stack(src, dst);
+                ft_putstr_fd("pb\n", 1);
             }
             else
-                ra(stack);
+            {
+                rotate_stack(src);
+                ft_putstr_fd("ra\n", 1);
+            }
         }
     }
 }
 
-void partition_b(node **stack, node **b)
+void to_b(node **src, node **dst)
+{
+    if (count_nodes(*src) == 2)
+    {
+        if (!is_sorted(*src))
+            swap_first_two(src);
+        return;
+    }
+
+    sa_partition(src, dst);
+
+    to_b(src, dst);
+}
+
+void sb_partition(node **src, node **dst)
 {
     int median;
 
-    median = find_median(*stack, count_nodes(*b));
-    while (*b && count_nodes(*b) > 0)
+    median = find_median(*src, count_nodes(*src));
+    while (count_nodes(*src) > 2 && has_bigger(src, median))
     {
-        if ((*b)->data < median)
-            pa(b, stack);
+        if ((*src)->data > median)
+        {
+            push_to_stack(src, dst);
+            ft_putstr_fd("pb\n", 1);
+        }
         else
         {
-            if (tail_bigger_median(*b, median))
-            {
-                rrb(b);
-                pa(b, stack);
-            }
-            else
-                rb(b);
+            rotate_stack(src);
+            ft_putstr_fd("ra\n", 1);
         }
     }
 }
 
-void final(node **stack)
+void to_a(node **src, node **dst)
 {
-    node *b = NULL;
+    if (count_nodes(*src) == 2)
+    {
+        if (is_sorted(*src))
+        {
+            swap_first_two(src);
+        }
+        push_to_stack(src, dst);
+        ft_putstr_fd("pa\n", 1);
+        push_to_stack(src, dst);
+        ft_putstr_fd("pa\n", 1);
+        return;
+    }
+
+    sb_partition(src, dst);
+
+    to_a(src, dst);
+}
+
+void until_sorted(node **sa, node **sb, int size)
+{
+    if ((is_sorted(*sa) && count_nodes(*sa) == size))
+        return;
+    to_b(sa, sb);
+    to_a(sb, sa);
+
+    until_sorted(sa, sb, size);
+}
+
+void final(node **sa)
+{
+    node *sb = NULL;
     int size;
 
-    printf("Final");
-    size = count_nodes(*stack);
-    if (size == 2 && !is_sorted(*stack))
-        sa(stack);
-    while (*stack && size > 2)
+    printf("Final\n");
+    size = count_nodes(*sa);
+    if (size <= 1 || is_sorted(*sa)) // || is_sorted(*sa)
+        return;
+    else if (size == 2 && !is_sorted(*sa))
     {
-        printf("A loop");
-        partition_a(stack, &b);
+        swap_first_two(sa);
+        return;
     }
-    while (b && count_nodes(b) > 0)
+
+    // if (!(is_sorted(*sa) && count_nodes(*sa) == 100))
+    // {
+    //     to_b(sa, &sb);
+    //     to_a(&sb, sa);
+    // }
+    until_sorted(sa, &sb, size);
+
+    node *temp = *sa;
+    while (temp)
     {
-        printf("B loop");
-        partition_b(stack, &b);
+        printf("A %i\n", temp->data);
+        temp = temp->next;
     }
-    // free_stack(stack);
-    free_stack(&b);
+    printf("Size %d\n", size);
+    printf("Final size %d\n", count_nodes(*sa));
+    printf("Sorted %d\n", is_sorted(*sa));
+    free_stack(&sb);
 }
