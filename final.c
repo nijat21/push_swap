@@ -36,16 +36,15 @@ void final(node **sa)
     int index = 0;
 
     size = count_nodes(*sa);
-    if (size <= 1 || is_sorted(*sa)) // || is_sorted(*sa)
+    if (is_sorted(*sa))
         return;
     else if (size == 2 && !is_sorted(*sa))
     {
         swap_first_two(sa);
+        ft_putstr_fd("sa\n", 1);
         return;
     }
 
-    // if (!(is_sorted(*sa) && count_nodes(*sa) == 100))
-    // {
     to_b(sa, &sb, sizes, &index);
     back_to_a(&sb, sa, sizes, &index);
     // to_a(&sb, sa, sizes, index);
@@ -63,14 +62,11 @@ void final(node **sa)
         printf("A %i\n", temp->data);
         temp = temp->next;
     }
-    temp = sb;
-    while (temp)
-    {
-        printf("B %i\n", temp->data);
-        temp = temp->next;
-    }
-    // printf("Size %d\n", size);
-    // printf("Final size %d\n", count_nodes(*sa));
-    // printf("Sorted %d\n", is_sorted(*sa));
+    // temp = sb;
+    // while (temp)
+    // {
+    //     printf("B %i\n", temp->data);
+    //     temp = temp->next;
+    // }
     free_stack(&sb);
 }
