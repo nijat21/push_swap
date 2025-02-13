@@ -14,143 +14,27 @@ int is_sorted(node *stack)
     return (1);
 }
 
-int tail_smaller_median(node *stack, int median)
-{
-    while (stack->next)
-        stack = stack->next;
-    if (stack->data < median)
-        return (1);
-    return (0);
-}
-
-int has_smaller(node **stack, int median)
+int desc_sorted(node *stack)
 {
     node *temp;
 
-    temp = *stack;
-    while (temp)
+    temp = stack;
+    while (temp->next)
     {
-        if (temp->data < median)
-            return (1);
+        if (temp->data < temp->next->data)
+            return (0);
         temp = temp->next;
     }
-    return 0;
-}
-
-int has_bigger(node **stack, int median)
-{
-    node *temp;
-
-    temp = *stack;
-    while (temp)
-    {
-        if (temp->data > median)
-            return (1);
-        temp = temp->next;
-    }
-    return 0;
-}
-
-void sa_partition(node **src, node **dst)
-{
-    int median;
-
-    median = find_median(*src, count_nodes(*src));
-    while (count_nodes(*src) > 2 && has_smaller(src, median)) //
-    {
-        if ((*src)->data < median)
-        {
-            push_to_stack(src, dst);
-            ft_putstr_fd("pb\n", 1);
-        }
-        else
-        {
-            if (tail_smaller_median(*src, median))
-            {
-                rev_rotate_stack(src);
-                ft_putstr_fd("rra\n", 1);
-                push_to_stack(src, dst);
-                ft_putstr_fd("pb\n", 1);
-            }
-            else
-            {
-                rotate_stack(src);
-                ft_putstr_fd("ra\n", 1);
-            }
-        }
-    }
-}
-
-void to_b(node **src, node **dst)
-{
-    if (count_nodes(*src) == 2)
-    {
-        if (!is_sorted(*src))
-            swap_first_two(src);
-        return;
-    }
-
-    sa_partition(src, dst);
-
-    to_b(src, dst);
-}
-
-void sb_partition(node **src, node **dst)
-{
-    int median;
-
-    median = find_median(*src, count_nodes(*src));
-    while (count_nodes(*src) > 2 && has_bigger(src, median))
-    {
-        if ((*src)->data > median)
-        {
-            push_to_stack(src, dst);
-            ft_putstr_fd("pb\n", 1);
-        }
-        else
-        {
-            rotate_stack(src);
-            ft_putstr_fd("ra\n", 1);
-        }
-    }
-}
-
-void to_a(node **src, node **dst)
-{
-    if (count_nodes(*src) == 2)
-    {
-        if (is_sorted(*src))
-        {
-            swap_first_two(src);
-        }
-        push_to_stack(src, dst);
-        ft_putstr_fd("pa\n", 1);
-        push_to_stack(src, dst);
-        ft_putstr_fd("pa\n", 1);
-        return;
-    }
-
-    sb_partition(src, dst);
-
-    to_a(src, dst);
-}
-
-void until_sorted(node **sa, node **sb, int size)
-{
-    if ((is_sorted(*sa) && count_nodes(*sa) == size))
-        return;
-    to_b(sa, sb);
-    to_a(sb, sa);
-
-    until_sorted(sa, sb, size);
+    return (1);
 }
 
 void final(node **sa)
 {
     node *sb = NULL;
     int size;
+    int sizes[count_nodes(*sa) - 2];
+    int index = 0;
 
-    printf("Final\n");
     size = count_nodes(*sa);
     if (size <= 1 || is_sorted(*sa)) // || is_sorted(*sa)
         return;
@@ -162,10 +46,16 @@ void final(node **sa)
 
     // if (!(is_sorted(*sa) && count_nodes(*sa) == 100))
     // {
-    //     to_b(sa, &sb);
-    //     to_a(&sb, sa);
+    to_b(sa, &sb, sizes, &index);
+    back_to_a(&sb, sa, sizes, &index);
+    // to_a(&sb, sa, sizes, index);
+
     // }
-    until_sorted(sa, &sb, size);
+
+    // for (int i = 2; i >= 0; i--)
+    // {
+    //     printf("Sizes %i\n", sizes[i]);
+    // }
 
     node *temp = *sa;
     while (temp)
@@ -173,8 +63,14 @@ void final(node **sa)
         printf("A %i\n", temp->data);
         temp = temp->next;
     }
-    printf("Size %d\n", size);
-    printf("Final size %d\n", count_nodes(*sa));
-    printf("Sorted %d\n", is_sorted(*sa));
+    temp = sb;
+    while (temp)
+    {
+        printf("B %i\n", temp->data);
+        temp = temp->next;
+    }
+    // printf("Size %d\n", size);
+    // printf("Final size %d\n", count_nodes(*sa));
+    // printf("Sorted %d\n", is_sorted(*sa));
     free_stack(&sb);
 }

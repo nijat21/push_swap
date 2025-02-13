@@ -11,7 +11,8 @@ typedef struct s_node
 } node;
 
 // Format input and checks
-node *format_input(int ac, char **av);
+node *
+format_input(int ac, char **av);
 int is_valid(int num, char *str, node **head);
 
 // Sort operations
@@ -35,12 +36,16 @@ void rrr(node **stack_a, node **stack_b);
 // Helper functions
 int count_nums(char *str);
 int count_nodes(node *stack);
-int find_median(node *stack, int size);
+int find_median(node *stack, int size, int *count);
 void free_stack(node **stack);
 void free_arr(char ***str);
 
 // Simplified sort
 void sort(node **stack);
 void final(node **stack);
+void to_a(node **src, node **dst, int *sizes, int index);
+void to_b(node **src, node **dst, int *sizes, int *index);
+void back_to_a(node **src, node **dst, int *sizes, int *index);
+int is_sorted(node *stack);
 
 #endif
