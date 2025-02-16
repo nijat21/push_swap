@@ -56,17 +56,17 @@ void final(node **sa)
     //     printf("Sizes %i\n", sizes[i]);
     // }
 
-    node *temp = *sa;
-    while (temp)
-    {
-        printf("A %i\n", temp->data);
-        temp = temp->next;
-    }
-    temp = sb;
-    while (temp)
-    {
-        printf("B %i\n", temp->data);
-        temp = temp->next;
-    }
+    // node *temp = *sa;
+    // while (temp)
+    // {
+    //     printf("A %i\n", temp->data);
+    //     temp = temp->next;
+    // }
+    // temp = sb;
+    // while (temp)
+    // {
+    //     printf("B %i\n", temp->data);
+    //     temp = temp->next;
+    // }
     free_stack(&sb);
 }
