@@ -1,111 +1,110 @@
 #include "push_swap.h"
 
-int sb_partition(node **src, node **dst, int partition_size)
+void handle_small_stack(node **src, node **dst, int size, int *pushed)
+{
+    if (!src || !(*src))
+        return;
+    if (size == 2)
+    {
+        if (*src && (*src)->next && (*src)->data < (*src)->next->data)
+        {
+            swap_first_two(src);
+            printf("Data %d next %d\n", (*src)->data, (*src)->next->data);
+            ft_putstr_fd("sb\n", 1);
+        }
+        printf("push small %d\n", (*src)->data);
+        push_to_stack(src, dst);
+        ft_putstr_fd("pa\n", 1);
+        (*pushed)++;
+    }
+    printf("push small %d\n", (*src)->data);
+    push_to_stack(src, dst);
+    ft_putstr_fd("pa\n", 1);
+    (*pushed)++;
+}
+
+int has_bigger(int num, node *src)
+{
+    if (!src)
+        return 0;
+    while (src)
+    {
+        if (src->data > num)
+            return 1;
+        src = src->next;
+    }
+    return 0;
+}
+
+void b_partition(node **src, node **dst, int partition_size, int *pushed)
 {
     int median;
-    int count;
-    int i = 0;
+    int count_bigger;
+    // int i = 0;
     int rotations = 0;
 
-    median = find_median(*src, partition_size, &count);
-    count = partition_size - count - 1;
-    while (i < count && *src)
+    median = find_median(*src, partition_size, &count_bigger);
+    count_bigger = partition_size - count_bigger - 1;
+    printf("Median %d\n", median);
+    printf("count_bigger %d\n", count_bigger);
+    while (*src && (*pushed) < count_bigger)
     {
-
-        printf("i: %d, count: %d, current number: %d, median: %d\n",
-               i, count, (*src)->data, median);
-
-        if (count - i <= 2)
-        {
-            if (count - i == 2 && *src && (*src)->next && (*src)->data < (*src)->next->data)
-            {
-                swap_first_two(src);
-                push_to_stack(src, dst);
-                ft_putstr_fd("pa\n", 1);
-                i++;
-            }
-            push_to_stack(src, dst);
-            ft_putstr_fd("pa\n", 1);
-            i++;
-            continue;
-        }
-        if (*src && (*src)->data > median)
+        if ((*src)->data > median && !has_bigger((*src)->data, *src))
         {
             push_to_stack(src, dst);
             ft_putstr_fd("pa\n", 1);
-            i++;
+            (*pushed)++;
         }
-        else if (*src)
+        else
         {
             rotate_stack(src);
             ft_putstr_fd("rb\n", 1);
             rotations++;
         }
-
-        // Add check for full rotation
-        if (rotations >= partition_size)
-        {
-            printf("Full rotation without finding enough numbers > median\n");
-            break;
-        }
     }
-    while (rotations > 0 && *src)
+    while (rotations)
     {
         rev_rotate_stack(src);
         ft_putstr_fd("rrb\n", 1);
         rotations--;
     }
-
-    printf("Count: %d I: %d\n", count, i);
-
-    return i;
+    printf("b_partition - pushed %d\n", partition_size - (*pushed));
 }
 
-void to_a(node **src, node **dst, int *sizes, int index)
+void back_to_a(node **src, node **dst, int *sizes, int *index)
 {
-    int i;
+    int current_partition_size;
+    static int pushed;
+    int leftover = 0;
+    // int curr_index = (*index) - 1;
+    // If there are 3 partitions, current index is 2, the last one.
 
-    i = index - 1;
-    while (i >= 0)
+    current_partition_size = sizes[(*index) - 1];
+    printf("Stage1 ==> Index %d Size %d Leftover %d Pushed %d\n", *index - 1, current_partition_size, leftover, pushed);
+    if (current_partition_size <= 2)
     {
-        if (sizes[i] <= 2)
-        {
-            if (sizes[i] == 2 && *src && (*src)->next && (*src)->data < (*src)->next->data)
-            {
-                swap_first_two(src);
-                push_to_stack(src, dst);
-                ft_putstr_fd("pa\n", 1);
-            }
-            push_to_stack(src, dst);
-            ft_putstr_fd("pa\n", 1);
-        }
-        else
-        {
-            sb_partition(src, dst, sizes[i]);
-            if (*src)
-                to_a(src, dst, sizes, i);
-            // int pushed = sb_partition(src, dst, sizes[i]);
-            // int remaining = sizes[i] - pushed;
-            // if (remaining > 0)
-            // {
-            //     sizes[i] = remaining;         // Update size to remaining elements
-            //     to_a(src, dst, sizes, index); // Reprocess current partition
-            // }
-        }
-        i--;
+        handle_small_stack(src, dst, current_partition_size, &pushed);
+        printf("to_a small\n");
     }
-}
+    else
+    {
+        b_partition(src, dst, current_partition_size, &pushed);
+        printf("to_a large\n");
+    }
 
-void small_partitions(node **src, node **dst, int size, int *i)
-{ // Handle small partitions directly
-    if (size == 2 && *src && (*src)->data < (*src)->next->data)
+    leftover = current_partition_size - pushed;
+    printf("Stage2 ==> Index %d Size %d Leftover %d Pushed %d\n", *index - 1, current_partition_size, leftover, pushed);
+    if (leftover > 0)
     {
-        swap_first_two(src);
-        push_to_stack(src, dst);
-        ft_putstr_fd("pa\n", 1);
-        (*i)++;
+        sizes[(*index) - 1] = leftover;
+        pushed = 0;
+        back_to_a(src, dst, sizes, index);
     }
-    push_to_stack(src, dst);
-    ft_putstr_fd("pa\n", 1);
-    (*i)++;
+    else
+    {
+        (*index)--;
+        pushed = 0;
+        if ((*index) - 1 >= 0)
+            back_to_a(src, dst, sizes, index);
+    }
 }

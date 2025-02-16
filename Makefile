@@ -7,7 +7,7 @@ CFLAGS= -g -Wall -Wextra -Werror
 
 SRCS:=format_input.c push_swap.c check_input.c sort_operations.c utils.c \
 		find_median.c sort.c opps_wrappers.c final.c sa_partition.c \
-		b_partitions.c 
+		sb_partition.c
 
 OBJS:=$(SRCS:%.c= %.o)
 

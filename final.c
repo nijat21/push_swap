@@ -62,11 +62,11 @@ void final(node **sa)
         printf("A %i\n", temp->data);
         temp = temp->next;
     }
-    // temp = sb;
-    // while (temp)
-    // {
-    //     printf("B %i\n", temp->data);
-    //     temp = temp->next;
-    // }
+    temp = sb;
+    while (temp)
+    {
+        printf("B %i\n", temp->data);
+        temp = temp->next;
+    }
     free_stack(&sb);
 }
