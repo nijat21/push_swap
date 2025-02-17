@@ -2,6 +2,7 @@
 #define PUSH_SWAP_H
 
 #include "Libft/libft.h"
+#include <limits.h>
 
 typedef struct s_node
 {

@@ -32,7 +32,7 @@ int is_valid(int num, char *str, node **head)
         !check_for_numeric(str) ||
         !check_duplicate(num, (*head)))
     {
-        ft_putstr_fd("Error\n", 1);
+        ft_putstr_fd("Error\n", 2);
         return (0);
     }
     return (1);
