@@ -19,24 +19,20 @@ void sa_partition(node **src, node **dst, int *partition_size)
     {
         if ((*src)->data < median)
         {
-            push_to_stack(src, dst);
-            ft_putstr_fd("pb\n", 1);
+            push_to_stack(src, dst, 'b');
             i++;
         }
         else
         {
             if (tail_smaller_median(*src, median))
             {
-                rev_rotate_stack(src);
-                ft_putstr_fd("rra\n", 1);
-                push_to_stack(src, dst);
-                ft_putstr_fd("pb\n", 1);
+                rev_rotate_stack(src, 'a');
+                push_to_stack(src, dst, 'b');
                 i++;
             }
             else
             {
-                rotate_stack(src);
-                ft_putstr_fd("ra\n", 1);
+                rotate_stack(src, 'a');
             }
         }
     }
@@ -50,7 +46,7 @@ void to_b(node **src, node **dst, int *sizes, int *index)
     if (count_nodes(*src) == 2)
     {
         if (!is_sorted(*src))
-            swap_first_two(src);
+            swap_first_two(src, 'a');
         return;
     }
     sa_partition(src, dst, &partition_size);

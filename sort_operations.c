@@ -13,7 +13,7 @@
 // rrr : rra and rrb at the same time.
 
 // Swap first two elements of stack
-void swap_first_two(node **stack)
+void swap_first_two(node **stack, char vocal)
 {
     node *first;
     node *second;
@@ -30,10 +30,12 @@ void swap_first_two(node **stack)
     second->prev = NULL;
     first->prev = second;
     *stack = second;
+    if (vocal)
+        ft_printf("s%c\n", vocal);
 }
 
 // Push the first element from src to dst
-void push_to_stack(node **src, node **dst)
+void push_to_stack(node **src, node **dst, char vocal)
 {
     node *t_s;
 
@@ -50,10 +52,12 @@ void push_to_stack(node **src, node **dst)
         (*dst)->prev = t_s;
     (*dst) = t_s;
     (*dst)->prev = NULL;
+    if (vocal)
+        ft_printf("p%c\n", vocal);
 }
 
 // Rotate stack up by 1
-void rotate_stack(node **stack)
+void rotate_stack(node **stack, char vocal)
 {
     node *temp;
     node *iter;
@@ -69,10 +73,12 @@ void rotate_stack(node **stack)
     iter->next = temp;
     temp->prev = iter;
     temp->next = NULL;
+    if (vocal)
+        ft_printf("r%c\n", vocal);
 }
 
 // Rotate stack down by 1
-void rev_rotate_stack(node **stack)
+void rev_rotate_stack(node **stack, char vocal)
 {
     node *iter;
 
@@ -89,4 +95,6 @@ void rev_rotate_stack(node **stack)
     iter->next = *stack;
     (*stack)->prev = iter;
     (*stack) = iter;
+    if (vocal)
+        ft_printf("rr%c\n", vocal);
 }

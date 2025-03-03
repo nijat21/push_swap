@@ -17,22 +17,10 @@ format_input(int ac, char **av);
 int is_valid(int num, char *str, node **head);
 
 // Sort operations
-void swap_first_two(node **stack);
-void push_to_stack(node **src, node **dst);
-void rotate_stack(node **stack);
-void rev_rotate_stack(node **stack);
-// opps wrappers
-void sa(node **stack_a);
-void sb(node **stack_b);
-void ss(node **stack_a, node **stack_b);
-void pa(node **stack_b, node **stack_a);
-void pb(node **stack_a, node **stack_b);
-void ra(node **stack_a);
-void rb(node **stack_b);
-void rr(node **stack_a, node **stack_b);
-void rra(node **stack_a);
-void rrb(node **stack_b);
-void rrr(node **stack_a, node **stack_b);
+void swap_first_two(node **stack, char vocal);
+void push_to_stack(node **src, node **dst, char vocal);
+void rotate_stack(node **stack, char vocal);
+void rev_rotate_stack(node **stack, char vocal);
 
 // Helper functions
 int count_nums(char *str);
@@ -40,13 +28,18 @@ int count_nodes(node *stack);
 int find_median(node *stack, int size, int *count);
 void free_stack(node **stack);
 void free_arr(char ***str);
+int find_max(node *src);
+
+// Specific node counts
+void handle_two(node **src, node **dst, int size, int *pushed);
+void handle_three_nodes(node **src, node **dst, int *pushed);
 
 // Simplified sort
-void sort(node **stack);
 void final(node **stack);
-void to_a(node **src, node **dst, int *sizes, int index);
 void to_b(node **src, node **dst, int *sizes, int *index);
 void back_to_a(node **src, node **dst, int *sizes, int *index);
 int is_sorted(node *stack);
+
+void quicksort_stack(node **stack_a, node **stack_b, int size);
 
 #endif

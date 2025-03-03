@@ -43,13 +43,12 @@ void final(node **sa)
         return;
     else if (size == 2 && !is_sorted(*sa))
     {
-        swap_first_two(sa);
-        ft_putstr_fd("sa\n", 1);
+        swap_first_two(sa, 'a');
         return;
     }
 
     to_b(sa, &sb, sizes, &index);
-    back_to_a(&sb, sa, sizes, &index);
+    // back_to_a(&sb, sa, sizes, &index);
 
     // }
 
@@ -70,6 +69,6 @@ void final(node **sa)
     //     printf("B %i\n", temp->data);
     //     temp = temp->next;
     // }
-    // printf("Sorted: %d\n", is_sorted(*sa));
+    printf("Sorted: %d\n", is_sorted(*sa));
     free_stack(&sb);
 }
