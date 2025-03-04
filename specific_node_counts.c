@@ -1,33 +1,5 @@
 #include "push_swap.h"
 
-int find_max(node *src)
-{
-    int max;
-
-    max = 0;
-    while (src)
-    {
-        if (src->data > max)
-            max = src->data;
-        src = src->next;
-    }
-    return max;
-}
-
-int find_min(node *src)
-{
-    int min;
-
-    min = 0;
-    while (src)
-    {
-        if (src->data < min)
-            min = src->data;
-        src = src->next;
-    }
-    return min;
-}
-
 void handle_two(node **src, node **dst, int size, int *pushed)
 {
     if (!src || !(*src))
@@ -46,34 +18,29 @@ void handle_two(node **src, node **dst, int size, int *pushed)
     (*pushed)++;
 }
 
-void handle_three_nodes(node **src, node **dst, int *pushed)
+void handle_three_asc(node **src, char s_name)
 {
     int max;
     int min;
 
-    max = find_max(*src);
-    min = find_min(*src);
-    if (min == 2 && max == 0)
+    max = max_index(*src);
+    min = min_index(*src);
+    if (is_sorted(*src))
         return;
-    else if (min == 0 && max == 2)
+    else if (min == 2 && max == 0)
     {
-        rotate_stack(src, 'b');
-        swap_first_two(src, 'b');
+        rotate_stack(src, s_name);
+        swap_first_two(src, s_name);
     }
     else if (min == 2 && max == 1)
-        swap_first_two(src, 'b');
+        rev_rotate_stack(src, s_name);
     else if (min == 0 && max == 1)
-        rotate_stack(src, 'b');
+    {
+        rev_rotate_stack(src, s_name);
+        swap_first_two(src, s_name);
+    }
     else if (min == 1 && max == 2)
-        rev_rotate_stack(src, 'b');
-    else
-    {
-        rev_rotate_stack(src, 'b');
-        swap_first_two(src, 'b');
-    }
-    while (src && *src)
-    {
-        push_to_stack(src, dst, 'a');
-        (*pushed)++;
-    }
+        swap_first_two(src, s_name);
+    else if (min == 1 && max == 0)
+        rotate_stack(src, s_name);
 }

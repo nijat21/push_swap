@@ -68,3 +68,20 @@ int count_nodes(node *stack)
     }
     return count;
 }
+
+int is_sorted(node *stack)
+{
+    node *temp;
+
+    temp = stack;
+    while (temp->next)
+    {
+        if (temp->data > temp->next->data)
+        {
+            // printf("Sort break %d\n", temp->data);
+            return (0);
+        }
+        temp = temp->next;
+    }
+    return (1);
+}

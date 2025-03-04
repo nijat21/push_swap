@@ -9,47 +9,91 @@ int tail_smaller_median(node *stack, int median)
     return (0);
 }
 
-void sa_partition(node **src, node **dst, int *partition_size)
+int next_smaller(node *src, int median)
 {
-    int median;
-    int i = 0;
+    int i;
 
-    median = find_median(*src, count_nodes(*src), partition_size);
-    while (i < *partition_size)
+    i = 0;
+    while (src)
     {
-        if ((*src)->data < median)
-        {
+        if (src->data <= median)
+            return i;
+        src = src->next;
+        i++;
+    }
+    return -1;
+}
+
+void sa_partition(node **src, node **dst, int median)
+{
+    while (next_smaller(*src, median) != -1 && count_nodes(*src) > 3)
+    {
+        if ((*src)->data <= median)
             push_to_stack(src, dst, 'b');
-            i++;
-        }
         else
         {
             if (tail_smaller_median(*src, median))
             {
                 rev_rotate_stack(src, 'a');
                 push_to_stack(src, dst, 'b');
-                i++;
             }
             else
-            {
-                rotate_stack(src, 'a');
-            }
+                cheap_rotate(src, next_smaller(*src, median), 'a');
         }
     }
+    if (count_nodes(*src) == 3)
+        handle_three_asc(src, 'a');
+    return;
 }
 
-void to_b(node **src, node **dst, int *sizes, int *index)
+void sort_a(node **src)
 {
-    int partition_size;
+    int min;
+    int min_i;
+    node *temp;
 
-    partition_size = 0;
-    if (count_nodes(*src) == 2)
+    temp = *src;
+    while (!is_sorted(*src))
+    {
+        min = find_min(temp);
+        min_i = min_index(temp);
+        cheap_rotate(&temp, min_i, 'a');
+        if (min == temp->data)
+            temp++;
+    }
+    // if (count_nodes(temp) == 3)
+    //     handle_three_asc(&temp, 'a');
+}
+
+void to_b(node **src, node **dst, int denom, int **medians)
+{
+    int list_len;
+    static int index = 0;
+
+    list_len = count_nodes(*src);
+    if (list_len <= 1 || is_sorted(*src))
+        return;
+    else if (list_len == 2)
     {
         if (!is_sorted(*src))
             swap_first_two(src, 'a');
         return;
     }
-    sa_partition(src, dst, &partition_size);
-    sizes[(*index)++] = partition_size;
-    to_b(src, dst, sizes, index);
+    else if (list_len == 3)
+    {
+        handle_three_asc(src, 'a');
+        return;
+    }
+    else
+    {
+        sa_partition(src, dst, (*medians)[index]);
+        index++;
+    }
+    if (index < denom - 1)
+        to_b(src, dst, denom, medians);
+    else
+    {
+        free(*medians);
+        sort_a(src);
+    }
 }

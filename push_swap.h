@@ -12,8 +12,7 @@ typedef struct s_node
 } node;
 
 // Format input and checks
-node *
-format_input(int ac, char **av);
+node *format_input(int ac, char **av);
 int is_valid(int num, char *str, node **head);
 
 // Sort operations
@@ -25,21 +24,29 @@ void rev_rotate_stack(node **stack, char vocal);
 // Helper functions
 int count_nums(char *str);
 int count_nodes(node *stack);
-int find_median(node *stack, int size, int *count);
+// int find_median(node *stack, int size, int denom);
+int find_median(node *stack, int size, int denom, int **medians);
 void free_stack(node **stack);
 void free_arr(char ***str);
+int desc_sorted(node *stack);
+int min_index(node *src);
+int max_index(node *src);
 int find_max(node *src);
+int find_min(node *src);
+int is_sorted(node *stack);
+void cheap_rotate(node **src, int index, char s_name);
 
 // Specific node counts
 void handle_two(node **src, node **dst, int size, int *pushed);
-void handle_three_nodes(node **src, node **dst, int *pushed);
+void handle_three_asc(node **src, char s_name);
 
 // Simplified sort
-void final(node **stack);
-void to_b(node **src, node **dst, int *sizes, int *index);
-void back_to_a(node **src, node **dst, int *sizes, int *index);
-int is_sorted(node *stack);
+void to_b(node **src, node **dst, int denom, int **medians);
+void to_a(node **src, node **dst);
+// void back_to_a(node **src, node **dst, int *sizes, int *index);
 
-void quicksort_stack(node **stack_a, node **stack_b, int size);
+void simple_sort(node **src, node **dst);
+
+void final(node **stack);
 
 #endif

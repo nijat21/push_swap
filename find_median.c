@@ -54,17 +54,25 @@ int *list_to_arr(node *stack, int size)
     return arr;
 }
 
-int find_median(node *stack, int size, int *count)
+int find_median(node *stack, int size, int denom, int **medians)
 {
     int median;
     int *arr;
+    int i;
+    int j;
 
+    i = 0;
+    j = 1;
     arr = list_to_arr(stack, size);
     quick_sort(arr, 0, size - 1);
-    median = arr[(size / 2)];
-    *count = size / 2;
-    // printf("Index %i\n", size / 2);
-    // printf("Median %i\n", median);
+    while (i < denom && j < denom)
+    {
+        // printf("Iside %d\n", (size * j / denom));
+        (*medians)[i] = arr[size * j / denom];
+        i++;
+        j++;
+    }
+    median = arr[(size / denom)];
     free(arr);
     arr = NULL;
     return median;
