@@ -43,9 +43,9 @@ void handle_three_asc(node **src, char s_name);
 // Simplified sort
 void to_b(node **src, node **dst, int denom, int **medians);
 void to_a(node **src, node **dst);
-// void back_to_a(node **src, node **dst, int *sizes, int *index);
+void back_to_a(node **src, node **dst);
 
-void simple_sort(node **src, node **dst);
+void simple_sort(node **src, node **dst, int size);
 
 void final(node **stack);
 

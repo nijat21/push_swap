@@ -46,23 +46,28 @@ void sa_partition(node **src, node **dst, int median)
     return;
 }
 
-void sort_a(node **src)
+void try_sort(node **src, node **dst, int size)
 {
     int min;
     int min_i;
-    node *temp;
 
-    temp = *src;
-    while (!is_sorted(*src))
+    while (*src && size > 3)
     {
-        min = find_min(temp);
-        min_i = min_index(temp);
-        cheap_rotate(&temp, min_i, 'a');
-        if (min == temp->data)
-            temp++;
+        min = find_min(*src);
+        min_i = min_index(*src);
+        if ((*src)->data == min)
+            push_to_stack(src, dst, 'b');
+        else if (min_i == 1)
+        {
+            swap_first_two(src, 'a');
+            push_to_stack(src, dst, 'b');
+        }
+        else
+            cheap_rotate(src, min_i, 'a');
+        size = count_nodes(*src);
     }
-    // if (count_nodes(temp) == 3)
-    //     handle_three_asc(&temp, 'a');
+    if (size == 3)
+        handle_three_asc(src, 'a');
 }
 
 void to_b(node **src, node **dst, int denom, int **medians)
@@ -94,6 +99,6 @@ void to_b(node **src, node **dst, int denom, int **medians)
     else
     {
         free(*medians);
-        sort_a(src);
+        try_sort(src, dst, count_nodes(*src));
     }
 }

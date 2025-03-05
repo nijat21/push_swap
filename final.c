@@ -35,39 +35,39 @@ void final(node **sa)
         swap_first_two(sa, 'a');
         return;
     }
-    else if (size <= 10)
-        simple_sort(sa, &sb);
+    else if (size >= 3 && size <= 10)
+        simple_sort(sa, &sb, size);
     else if (size > 10 && size <= 100)
     {
         medians = malloc((4 - 1) * sizeof(int));
         find_median(*sa, list_len, 4, &medians);
-        for (int i = 0; i < 3; i++)
-            printf("Medians %d\n", (medians)[i]);
+        // for (int i = 0; i < 3; i++)
+        //     printf("Medians %d\n", (medians)[i]);
         to_b(sa, &sb, 4, &medians);
-        // to_a(&sb, sa);
+        back_to_a(&sb, sa);
     }
-
-    // back_to_a(&sb, sa, sizes, &index);
-
-    // }
-
-    // for (int i = 2; i >= 0; i--)
-    // {
-    //     printf("Sizes %i\n", sizes[i]);
-    // }
-
-    node *temp = *sa;
-    while (temp)
+    else if (size > 100)
     {
-        printf("A %i\n", temp->data);
-        temp = temp->next;
+        medians = malloc((8 - 1) * sizeof(int));
+        find_median(*sa, list_len, 8, &medians);
+        // for (int i = 0; i < 3; i++)
+        //     printf("Medians %d\n", (medians)[i]);
+        to_b(sa, &sb, 8, &medians);
+        back_to_a(&sb, sa);
     }
-    temp = sb;
-    while (temp)
-    {
-        printf("B %i\n", temp->data);
-        temp = temp->next;
-    }
-    printf("Sorted: %d\n", is_sorted(*sa) && count_nodes(*sa) == list_len);
     free_stack(&sb);
+
+    // node *temp = *sa;
+    // while (temp)
+    // {
+    //     printf("A %i\n", temp->data);
+    //     temp = temp->next;
+    // }
+    // temp = sb;
+    // while (temp)
+    // {
+    //     printf("B %i\n", temp->data);
+    //     temp = temp->next;
+    // }
+    printf("Sorted: %d\n", is_sorted(*sa) && count_nodes(*sa) == list_len);
 }
