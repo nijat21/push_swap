@@ -3,13 +3,13 @@
 NAME=push_swap
 
 CC=cc
-CFLAGS= -g  -Wall -Wextra -Werror
+CFLAGS= -g  -Wall -Wextra -Werror -fsanitize=address
 
 # -fsanitize=address
 
 SRCS:=format_input.c push_swap.c check_input.c sort_operations.c utils.c utils2.c \
 		find_median.c final.c sa_partition.c sb_partition.c specific_node_counts.c \
-		b_part.c simple_sort.c
+		simple_sort.c  
 		
 
 OBJS:=$(SRCS:%.c= %.o)

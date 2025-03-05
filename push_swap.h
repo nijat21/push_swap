@@ -26,6 +26,7 @@ int count_nums(char *str);
 int count_nodes(node *stack);
 // int find_median(node *stack, int size, int denom);
 int find_median(node *stack, int size, int denom, int **medians);
+
 void free_stack(node **stack);
 void free_arr(char ***str);
 int desc_sorted(node *stack);
@@ -37,13 +38,12 @@ int is_sorted(node *stack);
 void cheap_rotate(node **src, int index, char s_name);
 
 // Specific node counts
-void handle_two(node **src, node **dst, int size, int *pushed);
+void handle_two(node **src, node **dst, int size);
 void handle_three_asc(node **src, char s_name);
 
 // Simplified sort
 void to_b(node **src, node **dst, int denom, int **medians);
 void to_a(node **src, node **dst);
-void back_to_a(node **src, node **dst);
 
 void simple_sort(node **src, node **dst, int size);
 

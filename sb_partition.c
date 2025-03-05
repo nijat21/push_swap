@@ -1,12 +1,14 @@
 #include "push_swap.h"
 
-void back_to_a(node **src, node **dst)
+void to_a(node **src, node **dst)
 {
     int max;
     int max_i;
     int size;
 
     size = count_nodes(*src);
+    if (size <= 2)
+        handle_two(src, dst, size);
     while (*src && size > 0)
     {
         max = find_max(*src);

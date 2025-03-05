@@ -1,6 +1,6 @@
 #include "push_swap.h"
 
-void handle_two(node **src, node **dst, int size, int *pushed)
+void handle_two(node **src, node **dst, int size)
 {
     if (!src || !(*src))
         return;
@@ -12,10 +12,8 @@ void handle_two(node **src, node **dst, int size, int *pushed)
             if ((*src)->next && ((*src)->data < (*src)->next->data))
                 swap_first_two(src, 'b');
             push_to_stack(src, dst, 'a');
-            (*pushed)++;
         }
     push_to_stack(src, dst, 'a');
-    (*pushed)++;
 }
 
 void handle_three_asc(node **src, char s_name)
